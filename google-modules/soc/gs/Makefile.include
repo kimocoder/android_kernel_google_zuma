@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# This file should be included by external modules that need to link to this
+# project.
+
+subdir-ccflags-y += -I$(srctree)/google-modules/soc/gs/include
+subdir-ccflags-y += -I$(srctree)/google-modules/soc/gs/include/uapi
+
+EXTRA_SYMBOLS += $(O)/../private/google-modules/soc/gs/Module.symvers

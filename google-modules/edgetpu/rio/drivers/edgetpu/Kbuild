@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: GPL-2.0
+
+# Use the absolute path of this Makefile to get the source directory.
+CURRENT_DIR=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+ccflags-y	+= $(EXTRA_CFLAGS) -DCONFIG_GCIP=1 \
+		   -I$(CURRENT_DIR)/include \
+		   -I$(CURRENT_DIR)/gcip-kernel-driver/include
+
+obj-$(CONFIG_RIO)	+= rio.o
+
+GCIP_DIR=gcip-kernel-driver/drivers/gcip
+
+edgetpu-objs	:= edgetpu-async.o \
+		   edgetpu-dmabuf.o \
+		   edgetpu-firmware-util.o \
+		   edgetpu-firmware.o \
+		   edgetpu-iremap-pool.o \
+		   edgetpu-kci.o \
+		   edgetpu-mailbox.o \
+		   edgetpu-mapping.o \
+		   edgetpu-sw-watchdog.o \
+		   edgetpu-thermal.o
+
+ifdef CONFIG_EDGETPU_TELEMETRY_TRACE
+edgetpu-objs	+= edgetpu-telemetry.o edgetpu-trace.o
+endif
+
+ifdef CONFIG_MODULES
+ifndef CONFIG_EDGETPU_TEST
+# Unit testing doesn't need this because GCIP is compiled as a built-in there.
+edgetpu-objs	+= $(GCIP_DIR)/gcip.o
+endif
+endif
+
+rio-objs	:= rio-core.o \
+		   rio-debug-dump.o \
+		   rio-device-group.o \
+		   rio-device.o \
+		   rio-external.o \
+		   rio-firmware.o \
+		   rio-fs.o \
+		   rio-iommu.o \
+		   rio-platform.o \
+		   rio-pm.o \
+		   rio-soc.o \
+		   rio-usage-stats.o \
+		   rio-wakelock.o \
+		   $(edgetpu-objs)
+
+CFLAGS_rio-fs.o := -DCONFIG_RIO=1
+CFLAGS_rio-core.o := -DCONFIG_RIO=1
+CFLAGS_rio-device.o := -DCONFIG_RIO=1
+CFLAGS_rio-device-group.o := -DCONFIG_RIO=1
+CFLAGS_rio-firmware.o := -DCONFIG_RIO=1
+CFLAGS_rio-iommu.o := -DCONFIG_RIO=1
+CFLAGS_rio-platform.o := -DCONFIG_RIO=1
+CFLAGS_rio-pm.o := -DCONFIG_RIO=1
+CFLAGS_rio-debug-dump.o := -DCONFIG_RIO=1
+CFLAGS_rio-usage-stats.o := -DCONFIG_RIO=1
+CFLAGS_rio-wakelock.o := -DCONFIG_RIO=1
+CFLAGS_rio-external.o := -DCONFIG_RIO=1
+CFLAGS_rio-soc.o := -DCONFIG_RIO=1
+
+
+
