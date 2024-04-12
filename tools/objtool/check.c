@@ -169,8 +169,9 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
 		"panic",
 		"do_exit",
 		"do_task_dead",
+		"kthread_exit",
 		"make_task_dead",
-		"__module_put_and_exit",
+		"__module_put_and_kthread_exit",
 		"complete_and_exit",
 		"__reiserfs_panic",
 		"lbug_with_loc",
@@ -2202,7 +2203,7 @@ static bool is_special_call(struct instruction *insn)
 		if (!dest)
 			return false;
 
-		if (dest->fentry)
+		if (dest->fentry || dest->embedded_insn)
 			return true;
 	}
 
