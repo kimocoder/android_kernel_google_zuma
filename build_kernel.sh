@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#dts_dir="out/arch/arm64/boot/dts/vendor/qcom"
+dts_dir="google-devices/shusky/dts/google"
 
 echo
 echo "Clean Build Directory"
@@ -45,4 +45,4 @@ echo
 make CC=$CLANG_CC LD=$CLANG_LD LDLTO=$CLANG_LD AR=$CLANG_AR NM=$CLANG_NM OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip O=out -j8
 
 
-#python3 scripts/mkdtboimg.py create out/dtbo.img --page_size=4096 $dts_dir/*.dtbo
+#python3 scripts/libufdt/utils/src/mkdtboimg.py create out/dtbo.img --page_size=4096 $dts_dir/*.dtbo
